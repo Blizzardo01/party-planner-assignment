@@ -1,0 +1,44 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f8;
+  margin: 20px;
+  color: #333;
+}
+
+main {
+  display: flex;
+  gap: 30px;
+}
+
+section {
+  width: 300px;
+  padding: 15px;
+  border: 2px solid #6ca0dc;
+  background-color: white;
+}
+
+h1 {
+  color: #2b6cb0;
+  margin-bottom: 10px;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid #6ca0dc;
+  background-color: #e8f1fb;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #cfe4fa;
+}
+
+p {
+  margin: 10px 0;
+}

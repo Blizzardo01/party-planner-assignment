@@ -6,6 +6,10 @@ async function getPartyList() {
     try {
     const api = `https://fsa-crud-2aa9294fe819.herokuapp.com/api/2605-ftb-et-web-ft/events`;
     const response = await fetch(api);
+
+    if (!response.ok) {
+        throw new Error(`http error, events could not be received: status: ${response.status}`);
+    }
     const { data } = await response.json(); 
     party_list = data;
     } catch (error) {
@@ -23,8 +27,13 @@ function upcomingPartyList() {
     const container = document.createElement("section");
     const list = document.createElement("ul");
 
+    try {
+        getPartyList();
+    }
+    catch (error) {
+        console.error("Unable to present event list: ", error);
+    }
 
-    getPartyList();
 
     for (const party of party_list) {
         partyListItem(party, list);
@@ -60,11 +69,12 @@ function selectedPartyDetails() {
     const container = document.createElement("section");
     const name_id = document.createElement("h1");
     const date = document.createElement("p");
+    const actual_date = new Date(selected_party.date);
     const location = document.createElement("p");
     const description = document.createElement("p");
 
     name_id.textContent = selected_party.name;
-    date.textContent = selected_party.date;
+    date.textContent = actual_date.toLocaleDateString();
     location.textContent = selected_party.location;
     description.textContent = selected_party.description;
 
