@@ -1,23 +1,21 @@
 let selected_party;
-const party_list = [];
+let party_list = [];
 
 
-const getPartyList = (partyList) => {
+async function getPartyList() {
     try {
-    const api = `https://fsa-crud-2aa9294fe819.herokuapp.com/api/2605-ftb-et-web-ft/events`
-    const response = fetch(api);
-    console.log(response);  
+    const api = `https://fsa-crud-2aa9294fe819.herokuapp.com/api/2605-ftb-et-web-ft/events`;
+    const response = await fetch(api);
+    const { data } = await response.json(); 
+    party_list = data;
     } catch (error) {
-
+        
     }
-
-
-
 }
 
 
-function getPartyItem() {
-
+function getPartyItem(id) {
+    selected_party = party_list.find((party) => party.id === id);
 }
 
 
@@ -25,21 +23,55 @@ function upcomingPartyList() {
     const container = document.createElement("section");
     const list = document.createElement("ul");
 
+
     getPartyList();
 
+    for (const party of party_list) {
+        partyListItem(party, list);
+    }
+
+    container.append(list);
+
+
     return container;
-
-
-    
 }
 
 
-function partyListItem() {
+function partyListItem(party, list) {
     const item = document.createElement("li");
+    item.textContent = party.name;
+    list.append(item);
+
+    item.addEventListener("click", () => {
+        getPartyItem(party.id);
+        render();
+    })
+
+    return item;
 }
 
 
 function selectedPartyDetails() {
+    if (!selected_party) {
+        const p = document.createElement("p");
+        p.textContent = "Please select an event to learn more."
+        return p;
+    } else {
+    const container = document.createElement("section");
+    const name_id = document.createElement("h1");
+    const date = document.createElement("p");
+    const location = document.createElement("p");
+    const description = document.createElement("p");
+
+    name_id.textContent = selected_party.name;
+    date.textContent = selected_party.date;
+    location.textContent = selected_party.location;
+    description.textContent = selected_party.description;
+
+    container.append(name_id, date, location, description);
+
+    return container;
+    }
 
 }
 
@@ -48,18 +80,19 @@ function render() {
     const app = document.querySelector("#app");
     app.innerHTML = `
     <main>
+    <h1>Upcoming Parties</h1>
     <PartyList></PartyList>
+    <h1>Party Details</h1>
     <PartyDetails></PartyDetails>
     </main>
     `;
-
     app.querySelector("PartyList").replaceWith(upcomingPartyList()); //look into
     app.querySelector("PartyDetails").replaceWith(selectedPartyDetails());
 
 }
 
-function init() {
-    getPartyList();
+async function init() {
+    await getPartyList();
     render();    
 }
 
