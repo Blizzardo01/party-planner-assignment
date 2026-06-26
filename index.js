@@ -13,7 +13,7 @@ async function getPartyList() {
     const { data } = await response.json(); 
     party_list = data;
     } catch (error) {
-        
+        console.error("parties not received");
     }
 }
 
